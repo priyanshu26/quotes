@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css"
+        integrity="sha512-PgQMlq+nqFLV4ylk1gwUOgm6CtIIXkKwaIHp/PAIWHzig/lKZSEGKEysh0TCVbHJXCLN7WetD8TFecIky75ZfQ=="
+        crossorigin="anonymous" />
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Fondamento&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <title>motivationalQuotes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            font-family: 'Fondamento', cursive;
+        }
+
+        .container {
+            background-color: rgb(165, 150, 128);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100vw;
+            height: 100vh;
+
+        }
+
+        .inner {
+            background-color: wheat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 76vw;
+            height: 77vh;
+            border-radius: 2rem;
+        }
+
+        .box {
+            padding: 5%;
+            width: 45vw;
+            height: 45vh;
+            background-color: white;
+            box-shadow: 0 0 2rem rgb(0 0 0 / 20%);
+            border-radius: 2rem;
+        }
+
+        .box .number {
+            background-color: antiquewhite;
+            position: relative;
+            top: -2rem;
+            left: 35rem;
+            width: 3rem;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 1rem;
+            box-shadow: 0 0 0.3rem rgba(0, 0, 0, 0.3);
+        }
+
+        .box .number img {
+            width: 2rem;
+            /* position: relative;
+            top: -2rem;
+            left: 35rem; */
+        }
+        .text i {
+            font-size: 3.5rem;
+            position: relative;
+            top: -4rem;
+            left: -1rem;
+            opacity: 0.2;
+        }
+
+        .text .quotes {
+            font-size: 1.6rem;
+            text-align: center;
+            position: relative;
+            top: -3rem;
+            left: auto;
+        }
+
+        .text .author {
+            text-align: right;
+        }
+
+        .button {
+            font-size: 1.4rem;
+            text-align: center;
+            display: block;
+            width: 50%;
+            border: 1px solid red;
+            position: fixed;
+            top: 30rem;
+            left: 25%;
+            color: whitesmoke;
+            border-radius: 2rem;
+            cursor: pointer;
+            background-color: rgb(102, 95, 81);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <div id="quotes"></div>
+    <div id="author"></div>
+    <button id="newQ">new Quotes</button>
+    <button id="tweetMe">Tweet</button> -->
+
+    <div class="container">
+        <div class="inner">
+            <div class="box">
+                <p class="number animate__animated animate__rotateIn">
+                    <img src="images/twitter-logo.png" alt="TweetMe" title="Tweet Me" id="tweetMe">
+                </p>
+
+                <div class="text animate__animated animate__zoomIn">
+                    <i class="start-quote fas fa-quote-left"></i>
+                    <p id="quotes" class="quotes"></p>
+                    <p id="author" class="author"></p>
+                </div>
+
+                <div class="button animate__animated animate__zoomIn">
+                    <p id="newQ" class="newQ">new Quotes</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const quotes = document.getElementById("quotes");
+        const author = document.getElementById("author");
+        const newQ = document.getElementById("newQ");
+        const tweetMe = document.getElementById("tweetMe");
+        let realData = "";
+        let quotesData = "";
+
+        let tweetNow = () => {
+            let tweetPost = `https://twitter.com/intent/tweet?text=${quotesData.text} ${quotesData.author}`;
+            window.open(tweetPost);
+        }
+
+        let getNewQuotes = () => {
+            let rnum = Math.floor(Math.random() * 1643);
+            // console.log(rnum);
+            // console.log(realData[rnum].text);
+            // console.log(realData[rnum].author);
+            quotesData = realData[rnum];
+            quotes.innerText = `${quotesData.text}`;
+            quotesData.author == null
+                ? (author.innerText = "unKnown")
+                : (author.innerText = `By ${quotesData.author}`);
+            // author.innerText = `${quotesData.author}`;
+        }
+        const getQuotes = async () => {
+            const api = "https://type.fit/api/quotes";
+            try {
+                let data = await fetch(api);
+                realData = await data.json();
+                // console.log(realData.length);
+                // console.log(realData[102].author);
+                getNewQuotes();
+            } catch (error) { }
+        };
+
+        tweetMe.addEventListener("click", tweetNow)
+        newQ.addEventListener("click", getNewQuotes);
+        getQuotes();
+    </script>
+</body>
+
+</html>
